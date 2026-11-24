@@ -2,6 +2,7 @@ package analyzer
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 
 	"github.com/compilyator/VNTU_GoLang/labs/Lab2Data/footballgoals"
@@ -25,7 +26,32 @@ func Validate(count int, competition string) (string, error) {
 	return competition, nil
 }
 
-// RunAnalyzer запускає генерацію та підрахунок
+func ParseCalculationNumbers(input string) ([]int, error) {
+	parts := strings.Fields(input)
+	if len(parts) == 0 {
+		return nil, nil
+	}
+
+	result := make([]int, 0, len(parts))
+	for _, s := range parts {
+		num, err := strconv.Atoi(s)
+		if err != nil {
+			return nil, errors.New("некоректне число у calculation: " + s)
+		}
+		result = append(result, num)
+	}
+
+	return result, nil
+}
+
+func CalcFrequencies(nums []int) map[int]int {
+	freq := make(map[int]int)
+	for _, v := range nums {
+		freq[v]++
+	}
+	return freq
+}
+
 func RunAnalyzer(count int, competition string, seed *int64) (AnalysisResult, []int, error) {
 	var values []int
 	var err error
